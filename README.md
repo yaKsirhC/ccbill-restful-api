@@ -1,8 +1,11 @@
 # Unofficial API for the CCBILL RESTful API
+
 ## Please Contribute!
+
 ### Basic Usage
+
 ```ts
-const ccbill = await ccbillGateway.create("34618470599e11eabb010050569d23bb", "JQX7mwuiaVRmBn0b9K9wfPska", "315fdb7a599c11eabb010050569d23bb", "awdDEAkcaDZZS1lC6P7muOGup", 951908, 131);
+const ccbill = await ccbillGateway.create(FRONTEND_USERNAME, FRONTEND_PASSWORD, BACKEND_USERNAME, BACKEND_PASSWORD, CLIENT_ACCOUNT_NUMBER, CLIENT_SUBACCOUNT_NUMBER);
 
 const paymentTokenId = await ccbill.createPaymentToken(
   {
@@ -38,5 +41,6 @@ await ccbill.createAndChargePayment(paymentTokenId.paymentTokenId as string, {
 ```
 
 ### TODOs:
+
 - Add support for Production Environment
 - Improve Error Handling
