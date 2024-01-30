@@ -5,7 +5,15 @@
 ### Basic Usage
 
 ```ts
-const ccbill = await ccbillGateway.create(FRONTEND_USERNAME, FRONTEND_PASSWORD, BACKEND_USERNAME, BACKEND_PASSWORD, CLIENT_ACCOUNT_NUMBER, CLIENT_SUBACCOUNT_NUMBER);
+const ccbill = await ccbillGateway
+	.create(
+		FRONTEND_USERNAME, 
+		FRONTEND_PASSWORD, 
+		BACKEND_USERNAME, 
+		BACKEND_PASSWORD, 
+		CLIENT_ACCOUNT_NUMBER, 
+		CLIENT_SUBACCOUNT_NUMBER
+	);
 
 const paymentTokenId = await ccbill.createPaymentToken(
   {
@@ -44,3 +52,4 @@ await ccbill.createAndChargePayment(paymentTokenId.paymentTokenId as string, {
 
 - Add support for Production Environment
 - Improve Error Handling
+- Add exmaples with new PaymentType Classes
