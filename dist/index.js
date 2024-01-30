@@ -22,7 +22,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _ccbillGateway_frontendBearerToken, _ccbillGateway_backendBearerToken, _ccbillGateway_clientAccnum, _ccbillGateway_clientSubaccnum, _ccbillGateway_frontendUsername, _ccbillGateway_FrontendPassword, _ccbillGateway_backendUsername, _ccbillGateway_backendPassword;
+var _ccbillGateway_frontendBearerToken, _ccbillGateway_backendBearerToken, _ccbillGateway_clientAccnum, _ccbillGateway_clientSubaccnum;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentTypes = void 0;
 const axios_1 = __importDefault(require("axios"));
@@ -77,74 +77,52 @@ class ccbillGateway {
      * @see [Thorough Documentation of APIs](https://github.com/CCBill/restful-api-guide?tab=readme-ov-file)
      *
      * @param username The username can be also refered as: MearchantID, Merchant Application ID
-     *
-     * ```js
-     * const ccbill = new ccbillGateway(username, password, clientAccountNumber, clientSubaccountNumber);
-     *
-     * (async () => {
-     *  await ccbill.init();
-     * })();
-     *
-     *
-     * ```
-     */
-    constructor(frontendUsername, FrontendPassword, backendUsername, backendPassword, clientAccnum, clientSubacc) {
+    */
+    constructor(frontendBearerToken, backendBearerToken, clientAccnum, clientSubacc) {
         _ccbillGateway_frontendBearerToken.set(this, void 0);
         _ccbillGateway_backendBearerToken.set(this, void 0);
         _ccbillGateway_clientAccnum.set(this, void 0);
         _ccbillGateway_clientSubaccnum.set(this, void 0);
-        _ccbillGateway_frontendUsername.set(this, void 0);
-        _ccbillGateway_FrontendPassword.set(this, void 0);
-        _ccbillGateway_backendUsername.set(this, void 0);
-        _ccbillGateway_backendPassword.set(this, void 0);
         __classPrivateFieldSet(this, _ccbillGateway_clientAccnum, clientAccnum, "f");
         __classPrivateFieldSet(this, _ccbillGateway_clientSubaccnum, clientSubacc, "f");
-        __classPrivateFieldSet(this, _ccbillGateway_frontendUsername, frontendUsername, "f");
-        __classPrivateFieldSet(this, _ccbillGateway_FrontendPassword, FrontendPassword, "f");
-        __classPrivateFieldSet(this, _ccbillGateway_backendUsername, backendUsername, "f");
-        __classPrivateFieldSet(this, _ccbillGateway_backendPassword, backendPassword, "f");
+        __classPrivateFieldSet(this, _ccbillGateway_frontendBearerToken, frontendBearerToken, "f");
+        __classPrivateFieldSet(this, _ccbillGateway_backendBearerToken, backendBearerToken, "f");
     }
     /*
-     * Retrieves your backend and frontend bearer tokens.
+     * Creates the CCBILL instance with the proper authorization.
      */
-    init() {
+    static create(frontendUsername, FrontendPassword, backendUsername, backendPassword, clientAccnum, clientSubacc) {
         return __awaiter(this, void 0, void 0, function* () {
             // FETCHING FRONTEND BEARER TOKEN
-            yield axios_1.default
+            const frontendBearerTokenRes = yield axios_1.default
                 .post(CCBILL_AUTHTOKEN_URL, {}, // BODY/DATA
             {
                 // HEADERS
                 auth: {
                     // AUTH
-                    username: __classPrivateFieldGet(this, _ccbillGateway_frontendUsername, "f"),
-                    password: __classPrivateFieldGet(this, _ccbillGateway_FrontendPassword, "f"),
+                    username: frontendUsername,
+                    password: FrontendPassword,
                 },
-            })
-                .then((req) => {
-                // console.log("[AUTH TOKEN GIVEN]: ", req.data.access_token);
-                __classPrivateFieldSet(this, _ccbillGateway_frontendBearerToken, req.data.access_token, "f");
             })
                 .catch((err) => {
                 console.error("[ERROR] error while fetching bearerToken: ", err);
             });
             // FETCHING BACKEND BEARER TOKEN
-            yield axios_1.default
+            const backendBearerTokenRes = yield axios_1.default
                 .post(CCBILL_AUTHTOKEN_URL, {}, // BODY/DATA
             {
                 // HEADERS
                 auth: {
                     // AUTH
-                    username: __classPrivateFieldGet(this, _ccbillGateway_backendUsername, "f"),
-                    password: __classPrivateFieldGet(this, _ccbillGateway_backendPassword, "f"),
+                    username: backendUsername,
+                    password: backendPassword,
                 },
-            })
-                .then((req) => {
-                // console.log("[AUTH TOKEN GIVEN]: ", req.data.access_token);
-                __classPrivateFieldSet(this, _ccbillGateway_backendBearerToken, req.data.access_token, "f");
             })
                 .catch((err) => {
                 console.error("[ERROR] error while fetching bearerToken: ", err);
             });
+            // TODO! Improve Error handling, types
+            return new ccbillGateway(frontendBearerTokenRes.data.access_token, backendBearerTokenRes.data.access_token, clientAccnum, clientSubacc);
         });
     }
     /**
@@ -235,6 +213,6 @@ class ccbillGateway {
         });
     }
 }
-_ccbillGateway_frontendBearerToken = new WeakMap(), _ccbillGateway_backendBearerToken = new WeakMap(), _ccbillGateway_clientAccnum = new WeakMap(), _ccbillGateway_clientSubaccnum = new WeakMap(), _ccbillGateway_frontendUsername = new WeakMap(), _ccbillGateway_FrontendPassword = new WeakMap(), _ccbillGateway_backendUsername = new WeakMap(), _ccbillGateway_backendPassword = new WeakMap();
+_ccbillGateway_frontendBearerToken = new WeakMap(), _ccbillGateway_backendBearerToken = new WeakMap(), _ccbillGateway_clientAccnum = new WeakMap(), _ccbillGateway_clientSubaccnum = new WeakMap();
 exports.default = ccbillGateway;
 // CK - 2024 - CK

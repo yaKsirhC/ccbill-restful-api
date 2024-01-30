@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { Axios, AxiosResponse } from "axios";
 const CCBILL_AUTHTOKEN_URL = "https://api.ccbill.com/ccbill-auth/oauth/token?grant_type=client_credentials";
 const CCBILL_CREATE_PAYMENT_TOKEN_URL = "https://api.ccbill.com/payment-tokens/merchant-only";
 const CCBILL_CHARGE_PAYMENT_URL_TEMPLATE = "https://api.ccbill.com/transactions/payment-tokens";
@@ -185,84 +185,64 @@ class ccbillGateway {
   #backendBearerToken: string | undefined;
   #clientAccnum: number;
   #clientSubaccnum: number;
-  #frontendUsername: string;
-  #FrontendPassword: string;
-  #backendUsername: string;
-  #backendPassword: string;
+  
   /**
    * Unofficial Nodejs api for handling CCBILL via the restful APIs.
    * @see [General Documentation](https://ccbill.com/doc/ccbill-restful-api-resources)
    * @see [Thorough Documentation of APIs](https://github.com/CCBill/restful-api-guide?tab=readme-ov-file)
    *
    * @param username The username can be also refered as: MearchantID, Merchant Application ID
-   *
-   * ```js
-   * const ccbill = new ccbillGateway(username, password, clientAccountNumber, clientSubaccountNumber);
-   *
-   * (async () => {
-   *  await ccbill.init();
-   * })();
-   *
-   *
-   * ```
-   */
-  constructor(frontendUsername: string, FrontendPassword: string, backendUsername: string, backendPassword: string, clientAccnum: number, clientSubacc: number) {
+  */
+  constructor(frontendBearerToken: string, backendBearerToken: string, clientAccnum: number, clientSubacc: number) {
     this.#clientAccnum = clientAccnum;
     this.#clientSubaccnum = clientSubacc;
-    this.#frontendUsername = frontendUsername;
-    this.#FrontendPassword = FrontendPassword;
-    this.#backendUsername = backendUsername;
-    this.#backendPassword = backendPassword;
+    this.#frontendBearerToken = frontendBearerToken
+    this.#backendBearerToken = backendBearerToken
+    
   }
   /*
-   * Retrieves your backend and frontend bearer tokens.
+   * Creates the CCBILL instance with the proper authorization.
    */
-  async init() {
+  static async create(frontendUsername: string, FrontendPassword: string, backendUsername: string, backendPassword: string, clientAccnum: number, clientSubacc: number): Promise<ccbillGateway> {
     // FETCHING FRONTEND BEARER TOKEN
 
-    await axios
-      .post(
+    const frontendBearerTokenRes = await axios
+      .post<any>(
         CCBILL_AUTHTOKEN_URL,
         {}, // BODY/DATA
         {
           // HEADERS
           auth: {
             // AUTH
-            username: this.#frontendUsername,
-            password: this.#FrontendPassword,
+            username: frontendUsername,
+            password: FrontendPassword,
           },
         }
       )
-      .then((req) => {
-        // console.log("[AUTH TOKEN GIVEN]: ", req.data.access_token);
-        this.#frontendBearerToken = req.data.access_token;
-      })
       .catch((err) => {
         console.error("[ERROR] error while fetching bearerToken: ", err);
       });
 
     // FETCHING BACKEND BEARER TOKEN
 
-    await axios
-      .post(
+    const backendBearerTokenRes = await axios
+      .post<any>(
         CCBILL_AUTHTOKEN_URL,
         {}, // BODY/DATA
         {
           // HEADERS
           auth: {
             // AUTH
-            username: this.#backendUsername,
-            password: this.#backendPassword,
+            username: backendUsername,
+            password: backendPassword,
           },
         }
       )
-      .then((req) => {
-        // console.log("[AUTH TOKEN GIVEN]: ", req.data.access_token);
-        this.#backendBearerToken = req.data.access_token;
-      })
       .catch((err) => {
         console.error("[ERROR] error while fetching bearerToken: ", err);
       });
+      // TODO! Improve Error handling, types
+      return new ccbillGateway((frontendBearerTokenRes as AxiosResponse<any>).data.access_token , (backendBearerTokenRes as AxiosResponse<any>).data.access_token, clientAccnum,clientSubacc);
   }
   /**
     * This will validate the field options and return a token to charge and complete the payment later.
