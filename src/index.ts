@@ -123,6 +123,20 @@ export namespace CCBILL {
 }
 
 export namespace PaymentTypes {
+  export interface recurringSubscriptionParams {
+    recurringPeriodInDays: number;
+    recurringPriceInUSD: number;
+    initalPeriodInDays?: number;
+    initalPriceInUSD?: number;
+    rebills?: number;
+    passThroughInfo?: Array<any>;
+  }
+
+  export interface oneTimeSubscriptionParams {
+    price: number;
+    passThroughInfo?: Array<any>;
+  }
+
   export class recurringSubscription implements CCBILL.chargePaymentParams {
     initialPeriod: number;
     initialPrice: number;
@@ -133,22 +147,14 @@ export namespace PaymentTypes {
     recurringPeriod?: number | undefined;
     currencyCode?: number | undefined;
     passThroughInfo?: any[] | undefined;
-    /**
-     *
-     * @param rebills how many rebills the subscription should last
-     * @param passThroughInfo any info
-     * @param recurringPeriodInDays
-     * @param recurringPriceInUSD
-     * @param initalPeriodInDays
-     * @param initalPriceInUSD
-     */
-    constructor(recurringPeriodInDays: number, recurringPriceInUSD: number, initalPeriodInDays?: number, initalPriceInUSD?: number, rebills?: number, passThroughInfo?: Array<any>) {
-      this.initialPeriod = initalPeriodInDays ?? recurringPeriodInDays;
-      this.initialPrice = initalPriceInUSD ?? recurringPriceInUSD;
-      this.recurringPeriod = recurringPeriodInDays;
-      this.recurringPrice = recurringPriceInUSD;
-      this.passThroughInfo = passThroughInfo;
-      this.rebills = rebills ?? 99;
+
+    constructor(recurringSubscriptionParams: recurringSubscriptionParams) {
+      this.initialPeriod = recurringSubscriptionParams.initalPeriodInDays ?? recurringSubscriptionParams.recurringPeriodInDays;
+      this.initialPrice = recurringSubscriptionParams.initalPriceInUSD ?? recurringSubscriptionParams.recurringPriceInUSD;
+      this.recurringPeriod = recurringSubscriptionParams.recurringPeriodInDays;
+      this.recurringPrice = recurringSubscriptionParams.recurringPriceInUSD;
+      this.passThroughInfo = recurringSubscriptionParams.passThroughInfo;
+      this.rebills = recurringSubscriptionParams.rebills ?? 99;
       this.lifeTimeSubscription = false;
       this.currencyCode = 840;
       this.createNewPaymentToken = false;
@@ -166,10 +172,10 @@ export namespace PaymentTypes {
     currencyCode?: number | undefined;
     passThroughInfo?: any[] | undefined;
 
-    constructor(price: number, passThroughInfo?: Array<any>) {
+    constructor(oneTimeSubscriptionParams:oneTimeSubscriptionParams) {
       this.initialPeriod = 2; // random number, it doenst matter
-      this.initialPrice = price;
-      this.passThroughInfo = passThroughInfo;
+      this.initialPrice = oneTimeSubscriptionParams.price;
+      this.passThroughInfo = oneTimeSubscriptionParams.passThroughInfo;
       this.recurringPeriod = 0;
       this.recurringPrice = 0;
       this.rebills = 0;
