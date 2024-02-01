@@ -143,7 +143,7 @@ declare class ccbillGateway {
      * @see [Thorough Documentation of APIs](https://github.com/CCBill/restful-api-guide?tab=readme-ov-file)
      *
      * @param username The username can be also refered as: MearchantID, Merchant Application ID
-    */
+     */
     constructor(frontendBearerToken: string, backendBearerToken: string, clientAccnum: number, clientSubacc: number);
     static create(frontendUsername: string, FrontendPassword: string, backendUsername: string, backendPassword: string, clientAccnum: number, clientSubacc: number): Promise<ccbillGateway>;
     /**

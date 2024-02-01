@@ -185,20 +185,19 @@ class ccbillGateway {
   #backendBearerToken: string | undefined;
   #clientAccnum: number;
   #clientSubaccnum: number;
-  
+
   /**
    * Unofficial Nodejs api for handling CCBILL via the restful APIs.
    * @see [General Documentation](https://ccbill.com/doc/ccbill-restful-api-resources)
    * @see [Thorough Documentation of APIs](https://github.com/CCBill/restful-api-guide?tab=readme-ov-file)
    *
    * @param username The username can be also refered as: MearchantID, Merchant Application ID
-  */
+   */
   constructor(frontendBearerToken: string, backendBearerToken: string, clientAccnum: number, clientSubacc: number) {
     this.#clientAccnum = clientAccnum;
     this.#clientSubaccnum = clientSubacc;
-    this.#frontendBearerToken = frontendBearerToken
-    this.#backendBearerToken = backendBearerToken
-    
+    this.#frontendBearerToken = frontendBearerToken;
+    this.#backendBearerToken = backendBearerToken;
   }
   /*
    * Creates the CCBILL instance with the proper authorization.
@@ -241,8 +240,8 @@ class ccbillGateway {
       .catch((err) => {
         console.error("[ERROR] error while fetching bearerToken: ", err);
       });
-      // TODO! Improve Error handling, types
-      return new ccbillGateway((frontendBearerTokenRes as AxiosResponse<any>).data.access_token , (backendBearerTokenRes as AxiosResponse<any>).data.access_token, clientAccnum,clientSubacc);
+    // TODO! Improve Error handling, types
+    return new ccbillGateway((frontendBearerTokenRes as AxiosResponse<any>).data.access_token, (backendBearerTokenRes as AxiosResponse<any>).data.access_token, clientAccnum, clientSubacc);
   }
   /**
     * This will validate the field options and return a token to charge and complete the payment later.

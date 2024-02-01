@@ -1,8 +1,10 @@
 # Unofficial API for the CCBILL RESTful API
 
-## Please Contribute!
+## IMPORTANT NOTICE
+- This package is in Beta, IF YOU HAVE ANY ISSUES, PLEASE REPORT IN GITHUB!
+- I receive no funding to create this, please contribute!
 
-### Basic Usage
+## Basic Usage
 
 ```ts
 const ccbill = await ccbillGateway

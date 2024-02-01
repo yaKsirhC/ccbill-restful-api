@@ -77,7 +77,7 @@ class ccbillGateway {
      * @see [Thorough Documentation of APIs](https://github.com/CCBill/restful-api-guide?tab=readme-ov-file)
      *
      * @param username The username can be also refered as: MearchantID, Merchant Application ID
-    */
+     */
     constructor(frontendBearerToken, backendBearerToken, clientAccnum, clientSubacc) {
         _ccbillGateway_frontendBearerToken.set(this, void 0);
         _ccbillGateway_backendBearerToken.set(this, void 0);
