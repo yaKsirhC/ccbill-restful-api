@@ -1,7 +1,7 @@
 # Unofficial API for the CCBILL RESTful API
 
 ## IMPORTANT NOTICE
-- This package is in Beta, IF YOU HAVE ANY ISSUES, PLEASE REPORT IN GITHUB!
+- This package is in Beta, IF YOU HAVE ANY ISSUES, PLEASE REPORT THEM IN GITHUB!
 - I receive no funding to create this, please contribute!
 
 ## Usage
@@ -56,4 +56,3 @@ await ccbill.createAndChargePayment(paymentTokenId.paymentTokenId as string, {
 
 - Add support for Production Environment
 - Improve Error Handling
-- Add exmaples with new PaymentType Classes
