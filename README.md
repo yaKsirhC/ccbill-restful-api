@@ -4,8 +4,10 @@
 - This package is in Beta, IF YOU HAVE ANY ISSUES, PLEASE REPORT IN GITHUB!
 - I receive no funding to create this, please contribute!
 
-## Basic Usage
-
+## Usage
+-  [One-time Subscriptions](https://github.com/yaKsirhC/ccbill-restful-api/blob/master/examples/oneTimeSubscription.md)
+- [Recurring Subscriptions](https://github.com/yaKsirhC/ccbill-restful-api/blob/master/examples/recurringSubscription.md)
+- ## Custom Subscriptions 
 ```ts
 const ccbill = await ccbillGateway
 	.create(
